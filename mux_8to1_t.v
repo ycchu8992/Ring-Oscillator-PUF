@@ -22,15 +22,17 @@ module mux_8to1_t ();
             
             sel = i[2:0];
 
-            in = 7'b0;
-            in[i] = 1;
+            
+            if(i==0)begin
+                in = 7'b1;
+            end
 
             #DELAY;
 
-            if(mux_out !== 1) begin
+            if(mux_out !== 1'b1) begin
 
                 $display("[ERROR] sel = %b,  mux_out = %b, correct mux_out should be %b",
-                    sel, mux_out, 1);
+                    sel, mux_out, 1'b1);
                 error_count = error_count + 1;
             end
             else begin
@@ -48,6 +50,7 @@ module mux_8to1_t ();
                 $display("[CORRECT] sel = %b,  mux_out = %b", sel, mux_out);
             end
             */
+            in = in<<1;
         end
 
         if(error_count === 0)
