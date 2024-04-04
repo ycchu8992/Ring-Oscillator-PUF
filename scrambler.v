@@ -19,7 +19,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module scrambler(input_challenge, clk, rst, output_challenge);
+module Scrambler(input_challenge, clk, rst, output_challenge);
 input [7:0] input_challenge;
 input clk, rst;
 output reg [7:0] output_challenge;
