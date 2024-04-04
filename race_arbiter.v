@@ -30,15 +30,15 @@ output done;
 
     always @(*) begin
         next_winner = next_winner;
-        next_done = next_done;
+        next_done = 0;
         if(rst) begin
             next_done = 0;
         end else begin
-            if(finished1 && done!=1) begin
+            if(finished1) begin
                 next_winner = 1;
                 next_done = 1;
             end
-            else if(finished2 && done!=1) begin
+            else if(finished2) begin
                 next_winner = 0;
                 next_done = 1;
             end
