@@ -20,22 +20,21 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module MUX_8to1(a,b,c,d,e,f,g,h,sel,mux_out);
-input a,b,c,d,e,f,g,h;
-input [2:0] sel;	//from the output of scrambler
+module Multiplexer( pin_0, pin_1, pin_2, pin_3, pin_4, pin_5, pin_6, pin_7, scr_out, mux_out );
+input pin_0, pin_1, pin_2, pin_3, pin_4, pin_5, pin_6, pin_7
+input [2:0] scr_out;	//from the output of scrambler
 output reg mux_out;
-
     always @(*) begin
-        case (sel)
-            3'b000: mux_out = a; 
-            3'b001: mux_out = b; 
-            3'b010: mux_out = c; 
-            3'b011: mux_out = d; 
-            3'b100: mux_out = e; 
-            3'b101: mux_out = f; 
-            3'b110: mux_out = g; 
-            3'b111: mux_out = h; 
-            default: mux_out = a; 
+        case (scr_out)
+            3'b000: mux_out = pin_0; 
+            3'b001: mux_out = pin_1; 
+            3'b010: mux_out = pin_2; 
+            3'b011: mux_out = pin_3; 
+            3'b100: mux_out = pin_4; 
+            3'b101: mux_out = pin_5; 
+            3'b110: mux_out = pin_6; 
+            3'b111: mux_out = pin_7; 
+            default: mux_out = pin_0; 
         endcase
     end
 
