@@ -21,7 +21,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 module Multiplexer( pin_0, pin_1, pin_2, pin_3, pin_4, pin_5, pin_6, pin_7, scr_out, mux_out );
-input pin_0, pin_1, pin_2, pin_3, pin_4, pin_5, pin_6, pin_7
+input pin_0, pin_1, pin_2, pin_3, pin_4, pin_5, pin_6, pin_7;
 input [2:0] scr_out;	//from the output of scrambler
 output reg mux_out;
     always @(*) begin
