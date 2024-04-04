@@ -30,6 +30,7 @@ output ready;
     wire [15:0] out;
     wire [7:0] scr_out;
     wire [1:0] counter_in;
+    wire [1:0] counter_out;
 
     assign ready = 0;
     assign response = 8'b0;
@@ -66,5 +67,8 @@ output ready;
         .pin_4 (out[12]), .pin_5 (out[13]), .pin_6 (out[14]), .pin_7 (out[15]),
         .scr_out (scr_out[7:5]), .mux_out (counter_in[1])
     );
+
+    Counter lsb_cnt (.clk(clk), .rst(rst), .signal(counter_in[0]), .finished(counter_out[0]));
+    Counter msb_cnt (.clk(clk), .rst(rst), .signal(counter_in[1]), .finished(counter_out[1]));
 
 endmodule

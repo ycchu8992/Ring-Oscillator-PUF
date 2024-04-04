@@ -20,14 +20,24 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module counter(clk, rst, signal, finished);
-input signal;		//signal is the output from ring_osc_i
+module Counter(clk, rst, signal, finished);
+input signal;		
 input clk, rst;
-output reg finished;    //counts to a predetermined goal you set
+output reg finished;    
 
-***************
-**Your Coding**
-***************
+    integer counter = 0;
+
+    integer num = 89; //a predetermined goal.
+
+    always @(posedge clk) begin
+        if(signal) counter <= counter + 1;
+        else if(rst) counter <= 0;
+        else counter <= counter;
+    end
+    
+    always @(posedge clk) begin
+        finished <= (num==counter)?1'b1:1'b0;
+    end
 
 endmodule
 
