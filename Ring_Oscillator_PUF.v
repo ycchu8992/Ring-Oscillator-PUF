@@ -34,8 +34,7 @@ output ready;
     wire winner;
     wire done;
 
-    assign ready = 0;
-    assign response = 8'b0;
+    assign ready = ready_to_read;
 
     Ring_Oscillator #(.n(9)) ro_0 (.clk(clk), .enable(en), .rst(rst), .out(out[0]));
     Ring_Oscillator #(.n(2)) ro_1 (.clk(clk), .enable(en), .rst(rst), .out(out[1]));
@@ -73,5 +72,7 @@ output ready;
     Counter counter (.clk(clk), .rst(rst), .counter_in(counter_in), .counter_out(counter_out));
 
     Race_Arbiter race_arbiter(.finished1(counter_out[1]), .finished2(counter_out[0]), .rst(rst), .winner(winner), .done(done));
+
+    Buffer buffer (.clk(clk), .rst(rst), .winner(winner), .done(done), .response(response), .ready_to_read(ready_to_read));
 
 endmodule

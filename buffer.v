@@ -27,13 +27,32 @@ output reg[7:0] response;
 output ready_to_read;	//ready to read response
 
 //reset signal:pay attention to the order of resetting of these three
-output counter_rst;	//reset counter while generating response
-output scrambler_rst;	//reset scrambler while generating response 
-output arbiter_rst;	//reset arbiter while generating response 
+//output counter_rst;	//reset counter while generating response
+//output scrambler_rst;	//reset scrambler while generating response 
+//output arbiter_rst;	//reset arbiter while generating response 
 
-always @(posedge clk) begin
-    if(rst) begin
+    integer counter = 0;
+
+    reg ready;
+
+    assign ready_to_read = ready;
+
+    always @(posedge clk) begin
+        if(done) begin
+            response[7:0] <= {response[6:0], winner};
+            counter <= counter + 1;
+        end else begin
+            response <= response;
+            counter <= counter;
+        end
+        if(rst||ready) begin
+            response <= 8'b0;
+            counter <= 0;
+        end
     end
-end
+
+    always @(posedge clk ) begin
+        ready <= (counter>=8)?1'b1:1'b0;
+    end
 
 endmodule
