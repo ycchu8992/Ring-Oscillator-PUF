@@ -24,8 +24,20 @@ input [7:0] input_challenge;
 input clk, rst;
 output reg [7:0] output_challenge;
 
-***************
-**Your Coding**
-***************
+    reg next_bit;
+    reg [7:0] challenge;
 
+    always @(posedge clk, posedge rst) begin
+        if(rst)begin
+            challenge <= input_challenge;
+        end else begin
+            challenge <= challenge ^ {next_bit, challenge[7:1]};
+        end
+    end
+
+    always @(*)begin
+        next_bit = challenge[0]^challenge[1]^challenge[2]^challenge[3]^challenge[7];
+        output_challenge = challenge;
+    end
+        
 endmodule
