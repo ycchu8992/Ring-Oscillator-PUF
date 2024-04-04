@@ -33,29 +33,37 @@ output ready;
     wire [1:0] counter_out;
     wire winner;
     wire done;
+    wire counter_rst;	//reset counter while generating response
+    wire scrambler_rst;	//reset scrambler while generating response 
+    wire arbiter_rst;	//reset arbiter while generating response 
 
     assign ready = ready_to_read;
 
-    Ring_Oscillator #(.n(9)) ro_0 (.clk(clk), .enable(en), .rst(rst), .out(out[0]));
-    Ring_Oscillator #(.n(2)) ro_1 (.clk(clk), .enable(en), .rst(rst), .out(out[1]));
-    Ring_Oscillator #(.n(3)) ro_2 (.clk(clk), .enable(en), .rst(rst), .out(out[2]));
-    Ring_Oscillator #(.n(4)) ro_3 (.clk(clk), .enable(en), .rst(rst), .out(out[3]));
-    Ring_Oscillator #(.n(5)) ro_4 (.clk(clk), .enable(en), .rst(rst), .out(out[4]));
-    Ring_Oscillator #(.n(6)) ro_5 (.clk(clk), .enable(en), .rst(rst), .out(out[5]));
-    Ring_Oscillator #(.n(7)) ro_6 (.clk(clk), .enable(en), .rst(rst), .out(out[6]));
-    Ring_Oscillator #(.n(2)) ro_7 (.clk(clk), .enable(en), .rst(rst), .out(out[7]));
+    assign counter_rst = ready_to_read || rst;
+    assign scrambler_rst = ready_to_read || rst;
+    assign arbiter_rst = ready_to_read || rst;
+    assign oscillator_rst = ready_to_read || rst;
 
-    Ring_Oscillator #(.n(6)) ro_8 (.clk(clk), .enable(en), .rst(rst), .out(out[8]));
-    Ring_Oscillator #(.n(2)) ro_9 (.clk(clk), .enable(en), .rst(rst), .out(out[9]));
-    Ring_Oscillator #(.n(5)) ro_10 (.clk(clk), .enable(en), .rst(rst), .out(out[10]));
-    Ring_Oscillator #(.n(4)) ro_11 (.clk(clk), .enable(en), .rst(rst), .out(out[11]));
-    Ring_Oscillator #(.n(3)) ro_12 (.clk(clk), .enable(en), .rst(rst), .out(out[12]));
-    Ring_Oscillator #(.n(6)) ro_13 (.clk(clk), .enable(en), .rst(rst), .out(out[13]));
-    Ring_Oscillator #(.n(2)) ro_14 (.clk(clk), .enable(en), .rst(rst), .out(out[14]));
-    Ring_Oscillator #(.n(8)) ro_15 (.clk(clk), .enable(en), .rst(rst), .out(out[15]));
+    Ring_Oscillator #(.n(9)) ro_0 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[0]));
+    Ring_Oscillator #(.n(2)) ro_1 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[1]));
+    Ring_Oscillator #(.n(3)) ro_2 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[2]));
+    Ring_Oscillator #(.n(4)) ro_3 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[3]));
+    Ring_Oscillator #(.n(5)) ro_4 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[4]));
+    Ring_Oscillator #(.n(6)) ro_5 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[5]));
+    Ring_Oscillator #(.n(7)) ro_6 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[6]));
+    Ring_Oscillator #(.n(2)) ro_7 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[7]));
+
+    Ring_Oscillator #(.n(6)) ro_8 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[8]));
+    Ring_Oscillator #(.n(2)) ro_9 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[9]));
+    Ring_Oscillator #(.n(5)) ro_10 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[10]));
+    Ring_Oscillator #(.n(4)) ro_11 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[11]));
+    Ring_Oscillator #(.n(3)) ro_12 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[12]));
+    Ring_Oscillator #(.n(6)) ro_13 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[13]));
+    Ring_Oscillator #(.n(2)) ro_14 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[14]));
+    Ring_Oscillator #(.n(8)) ro_15 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[15]));
 
 
-    Scrambler scrambler_lfsr(.input_challenge(chall_in), .clk(clk), .rst(rst), .output_challenge(scr_out));
+    Scrambler scrambler_lfsr(.input_challenge(chall_in), .clk(clk), .rst(scrambler_rst), .output_challenge(scr_out));
 
     Multiplexer lsb_scr_o( 
         .pin_0 (out[0]), .pin_1 (out[1]), .pin_2 (out[2]), .pin_3 (out[3]),
@@ -69,9 +77,9 @@ output ready;
         .scr_out (scr_out[7:5]), .mux_out (counter_in[1])
     );
 
-    Counter counter (.clk(clk), .rst(rst), .counter_in(counter_in), .counter_out(counter_out));
+    Counter counter (.clk(clk), .rst(counter_rst), .counter_in(counter_in), .counter_out(counter_out));
 
-    Race_Arbiter race_arbiter(.finished1(counter_out[1]), .finished2(counter_out[0]), .rst(rst), .winner(winner), .done(done));
+    Race_Arbiter race_arbiter(.finished1(counter_out[1]), .finished2(counter_out[0]), .rst(arbiter_rst), .winner(winner), .done(done));
 
     Buffer buffer (.clk(clk), .rst(rst), .winner(winner), .done(done), .response(response), .ready_to_read(ready_to_read));
 

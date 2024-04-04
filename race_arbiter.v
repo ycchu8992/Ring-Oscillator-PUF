@@ -29,7 +29,7 @@ output done;
     assign done = next_done;
 
     always @(*) begin
-        next_winner = next_winner;
+        next_winner = 0;
         next_done = 0;
         if(rst) begin
             next_done = 0;

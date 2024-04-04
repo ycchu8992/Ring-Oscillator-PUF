@@ -51,8 +51,8 @@ output ready_to_read;	//ready to read response
         end
     end
 
-    always @(posedge clk ) begin
-        ready <= (counter>=8)?1'b1:1'b0;
+    always @(*) begin
+        ready = (counter>=8)?1'b1:1'b0;
     end
 
 endmodule
