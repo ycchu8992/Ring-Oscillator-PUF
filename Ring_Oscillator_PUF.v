@@ -70,8 +70,7 @@ output ready;
         .scr_out (scr_out[7:5]), .mux_out (counter_in[1])
     );
 
-    Counter lsb_cnt (.clk(clk), .rst(rst), .signal(counter_in[0]), .finished(counter_out[0]));
-    Counter msb_cnt (.clk(clk), .rst(rst), .signal(counter_in[1]), .finished(counter_out[1]));
+    Counter counter (.clk(clk), .rst(rst), .counter_in(counter_in), .counter_out(counter_out));
 
     Race_Arbiter race_arbiter(.finished1(counter_out[1]), .finished2(counter_out[0]), .rst(rst), .winner(winner), .done(done));
 

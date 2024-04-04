@@ -20,24 +20,36 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module Counter(clk, rst, signal, finished);
-input signal;		
+module Counter(clk, rst, counter_in, counter_out);
+input [1:0] counter_in;		
 input clk, rst;
-output reg finished;    
+output reg [1:0] counter_out;    
 
-    integer counter = 0;
+    integer counter0 = 0;
+    integer counter1 = 0;
 
-    integer num = 89; //a predetermined goal.
+    integer n = 89; //a predetermined goal.
 
     always @(posedge clk) begin
-        if(signal) counter <= counter + 1;
-        else if(rst) counter <= 0;
-        else counter <= counter;
+        if(counter_in[0]) begin
+            counter0 <= counter0 + 1;
+        end else counter0 <= counter0;
+        
+        if(  rst || counter_out[0] || counter_out[1] ) counter0 <=0;
     end
+
+    always @(*) begin
+        counter_out[0] = (counter0==n)?1'b1:1'b0;
+        counter_out[1] = (counter1==n)?1'b1:1'b0;
+    end
+
+    always @(posedge clk) begin
+        if(counter_in[1]) begin
+            counter1 <= counter1 + 1;
+        end else counter1 <= counter1;
+        if(  rst || counter_out[0] || counter_out[1] ) counter1 <=0;
+    end
+
     
-    always @(posedge clk) begin
-        finished <= (num==counter)?1'b1:1'b0;
-    end
-
 endmodule
 

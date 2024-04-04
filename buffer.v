@@ -19,7 +19,7 @@
 *
 */
 
-module buffer(clk, rst, winner, done, response, ready_to_read);
+module Buffer(clk, rst, winner, done, response, ready_to_read);
 input clk, rst;
 input winner;	 //output of race_arbiter
 input done;	 //output of race_arbiter
@@ -31,8 +31,9 @@ output counter_rst;	//reset counter while generating response
 output scrambler_rst;	//reset scrambler while generating response 
 output arbiter_rst;	//reset arbiter while generating response 
 
-***************
-**Your Coding**
-***************
+always @(posedge clk) begin
+    if(rst) begin
+    end
+end
 
 endmodule
