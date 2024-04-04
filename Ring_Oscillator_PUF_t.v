@@ -48,15 +48,14 @@ module Ring_Oscillator_PUF_t();
         rst = 1'b1;
         #DELAY;
         rst = 1'b0;
-
-        for(i = 0 ; i < 8 ; i = i + 1) begin
+        
+        for(i = 0 ; i < 2**8 ; i = i) begin
             #DELAY;
-        end
-        rst = 1'b1;
-        #DELAY;
-        rst = 1'b0;
-        for(i = 0 ; i < 8 ; i = i + 1) begin
-            #DELAY;
+            in = i[7:0];
+            if(ready)begin
+                $display("challenge = %b, response = %b", in, response);
+                i=i+1;
+            end
         end
 
         $finish;
