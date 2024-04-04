@@ -34,8 +34,8 @@ module ClockDivider #(
         if(counter >= n-1 || rst) counter <=0;
     end
     
-    always @(posedge clk ) begin
-        clk_out <= (((n-1)>>1)>=counter)?1'b1:1'b0;
+    always @(*) begin
+        clk_out = (((n-1)>>1)>=counter)?1'b0:1'b1;
     end
 
     assign delay = clk_out;
