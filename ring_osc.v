@@ -24,13 +24,14 @@ module ClockDivider #(
     parameter n = 100
 ) (
     input clk,
+    input rst,
     output wire delay
 );
     reg clk_out;
     integer counter = 0;
     always @(posedge clk ) begin
         counter <= counter + 1;
-        if(counter >= n-1) counter <=0;
+        if(counter >= n-1 || rst) counter <=0;
     end
     
     always @(posedge clk ) begin
@@ -47,11 +48,11 @@ output out;
     reg [12:0] connect;
     reg [12:0] next_connect;
 
-    ClockDivider #(.n(n)) Delay(.clk(clk), .delay(CLK));
+    ClockDivider #(.n(n)) Delay(.clk(clk), .rst(rst), .delay(CLK));
 
     always @(posedge CLK, posedge rst) begin
         if(rst) begin
-            next_connect <= 13'b1010_1010_1010_1;
+            next_connect <= 13'b0101_0101_0100_1;
         end else begin
             next_connect <= connect;
         end       

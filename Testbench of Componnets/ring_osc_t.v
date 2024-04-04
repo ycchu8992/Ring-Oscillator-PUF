@@ -27,11 +27,6 @@ module ring_osc_t ();
     Ring_Oscillator #(.n(8)) ro_7 (.clk(clk), .enable(enable), .rst(rst[7]), .out(out_7));
     //====================================
 
-    //====================================
-    // TODO: Connect your module here. Please connect it by port name but not order
-    Multiplexer name_of_chip(.a (out_0),.b (out_1),.c (out_2),.d (out_3),.e (out_4),.f (out_5),.g (out_6),.h (out_7),
-    .sel (sel),.mux_out (mux_out));
-    //====================================
 
     integer i, j,  error_count;
     initial begin
@@ -63,6 +58,11 @@ module ring_osc_t ();
                     $display("[CORRECT] sel = %b,  mux_out = %b", sel, mux_out);
                 end
             end
+            #1000;
+            rst = 8'b1111_1111;
+
+            #1000;
+            rst = 8'b0;
         end
 
         if(error_count === 0)
