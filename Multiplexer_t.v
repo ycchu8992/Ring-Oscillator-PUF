@@ -1,4 +1,4 @@
-module mux_8to1_t ();
+module Multiplexer_t ();
 
     parameter DELAY = 5;
 
@@ -8,7 +8,7 @@ module mux_8to1_t ();
 
     //====================================
     // TODO: Connect your module here. Please connect it by port name but not order
-    MUX_8to1 name_of_chip(.a (in[0]),.b (in[1]),.c (in[2]),.d (in[3]),.e (in[4]),.f (in[5]),.g (in[6]),.h (in[7]),.sel (sel),.mux_out (mux_out));
+    Multiplexer name_of_chip(.a (in[0]),.b (in[1]),.c (in[2]),.d (in[3]),.e (in[4]),.f (in[5]),.g (in[6]),.h (in[7]),.sel (sel),.mux_out (mux_out));
     //====================================
 
     integer i, error_count;

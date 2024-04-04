@@ -29,7 +29,7 @@ module ring_osc_t ();
 
     //====================================
     // TODO: Connect your module here. Please connect it by port name but not order
-    MUX_8to1 name_of_chip(.a (out_0),.b (out_1),.c (out_2),.d (out_3),.e (out_4),.f (out_5),.g (out_6),.h (out_7),
+    Multiplexer name_of_chip(.a (out_0),.b (out_1),.c (out_2),.d (out_3),.e (out_4),.f (out_5),.g (out_6),.h (out_7),
     .sel (sel),.mux_out (mux_out));
     //====================================
 

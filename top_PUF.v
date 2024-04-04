@@ -21,12 +21,16 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+multiplexer_8to1
 module top_PUF(clk, en, rst, chall_in, response, ready);
 input clk, en, rst;
 input[7:0] chall_in;
 output[7:0] response;
 output ready;
-
+    Multiplexer name_of_chip( 
+        .pin_1 (in[0]),
+        .pin_2 (in[1]),
+        .pin_3 (in[2]),.d (in[3]),.e (in[4]),.f (in[5]),.g (in[6]),.h (in[7]),.sel (sel),.mux_out (mux_out));
 ***************
 **Your Coding**
 ***************
