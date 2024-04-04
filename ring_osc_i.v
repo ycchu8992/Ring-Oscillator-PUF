@@ -20,13 +20,36 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module Ring_Oscillator(clk, enable, rst, out);
+module ClockDivider #(
+    parameter n = 100
+) (
+    input clk,
+    output wire delay
+);
+    reg clk_out;
+    integer counter = 0;
+    always @(posedge clk ) begin
+        counter <= counter + 1;
+        if(counter >= n-1) counter <=0;
+    end
+    
+    always @(posedge clk ) begin
+        clk_out <= (((n-1)>>1)>=counter)?1'b1:1'b0;
+    end
+
+    assign delay = clk_out;
+
+endmodule
+
+module Ring_Oscillator #(parameter n=10)(clk, enable, rst, out);
 input clk, enable, rst;
 output out;
     reg [12:0] connect;
     reg [12:0] next_connect;
 
-    always @(posedge clk) begin
+    ClockDivider #(.n(n)) Delay(.clk(clk), .delay(CLK));
+
+    always @(posedge CLK, posedge rst) begin
         if(rst) begin
             next_connect <= 13'b1010_1010_1010_1;
         end else begin
