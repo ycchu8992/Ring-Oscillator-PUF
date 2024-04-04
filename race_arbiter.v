@@ -19,13 +19,30 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module race_arbiter(finished1, finished2, rst, winner, done);
+module Race_Arbiter(finished1, finished2, rst, winner, done);
 input rst, finished1, finished2;
 output winner;
 output done;
+    reg next_done, next_winner;
 
-***************
-**Your Coding**
-***************
+    assign winner = next_winner;
+    assign done = next_done;
+
+    always @(*) begin
+        next_winner = next_winner;
+        next_done = next_done;
+        if(rst) begin
+            next_done = 0;
+        end else begin
+            if(finished1 && done!=1) begin
+                next_winner = 1;
+                next_done = 1;
+            end
+            else if(finished2 && done!=1) begin
+                next_winner = 0;
+                next_done = 1;
+            end
+        end
+    end
 
 endmodule
