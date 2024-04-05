@@ -44,13 +44,13 @@ output ready;
 
     assign ready = ready_to_read;
 
-    assign counter_rst = reset_counter ;//|| rst;
-    assign scrambler_rst = reset_scrambler;// || rst;
-    assign arbiter_rst = reset_arbiter;// || rst;
-    assign oscillator_rst = ready_to_read; //|| rst;
+    assign counter_rst = reset_counter || rst;
+    assign scrambler_rst = reset_scrambler || rst;
+    assign arbiter_rst = reset_arbiter || rst;
+    assign oscillator_rst = ready_to_read || rst;
 
     always @(posedge clk) begin
-        reset_counter <= ready_to_read || rst;
+        reset_counter <= ready_to_read// || rst;
         reset_scrambler <= reset_counter;
         reset_arbiter <= reset_counter;
     end
