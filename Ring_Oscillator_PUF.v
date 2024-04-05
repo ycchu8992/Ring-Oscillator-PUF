@@ -44,15 +44,14 @@ output ready;
 
     assign ready = ready_to_read;
 
-    assign counter_rst = reset_counter || rst;
-    assign scrambler_rst = reset_scrambler || rst;
-    assign arbiter_rst = reset_arbiter || rst;
+    assign counter_rst = ready_to_read || rst;
+    assign scrambler_rst = reset_scrambler;
+    assign arbiter_rst = reset_arbiter;
     assign oscillator_rst = ready_to_read || rst;
 
     always @(posedge clk) begin
-        reset_counter <= ready_to_read;// || rst;
-        reset_scrambler <= reset_counter;
-        reset_arbiter <= reset_counter;
+        reset_scrambler <= ready_to_read || rst;
+        reset_arbiter <= ready_to_read || rst;
     end
 
     Ring_Oscillator #(.n(9)) ro_0 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[0]));

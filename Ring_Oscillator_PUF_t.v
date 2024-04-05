@@ -59,7 +59,7 @@ module Ring_Oscillator_PUF_t();
                 if(response1 == response2 ) begin
                     $display("[CORRECT] challenge = %b, response1 = %b, response2 = %b", in, response1, response2);
                 end else begin
-                    $display("[ERROR] challenge = %b, rresponse1 = %b, response2 = %b", in, response1, response2);
+                    $display("[ERROR] challenge = %b, response1 = %b, response2 = %b", in, response1, response2);
                     error_count = error_count + 1;
                 end
                 cnt=0;

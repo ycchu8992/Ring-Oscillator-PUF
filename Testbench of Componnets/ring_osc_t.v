@@ -41,7 +41,10 @@ module ring_osc_t ();
         #DELAY;
         rst = 8'b0;
 
+        #DELAY;
+
         for(j = 0 ; j < 8 ; j = j + 1) begin
+            #DELAY;
             for(i = 0 ; i < 8 ; i = i + 1) begin
             
                 sel = i[2:0];
@@ -58,11 +61,6 @@ module ring_osc_t ();
                     $display("[CORRECT] sel = %b,  mux_out = %b", sel, mux_out);
                 end
             end
-            #1000;
-            rst = 8'b1111_1111;
-
-            #1000;
-            rst = 8'b0;
         end
 
         if(error_count === 0)

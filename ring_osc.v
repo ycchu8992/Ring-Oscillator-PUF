@@ -20,6 +20,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+
 module ClockDivider #(
     parameter n = 100
 ) (
@@ -48,13 +49,16 @@ output out;
     reg [12:0] connect;
     reg [12:0] next_connect;
 
+    //reg w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13;
+
     ClockDivider #(.n(n)) Delay(.clk(clk), .rst(rst), .delay(CLK));
 
-    always @(posedge CLK, posedge rst) begin
+    always @(posedge CLK, posedge rst) begin //posedge CLK, 
         if(rst) begin
-            next_connect <= 13'b0101_0101_0100_1;
+            next_connect = 13'b000_1000_0011_1;
         end else begin
-            next_connect <= connect;
+            
+            next_connect = connect;
         end       
     end
     
