@@ -19,25 +19,55 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 `define CYCLE_TIME 20.0
 
 module Ring_Oscillator_PUF_t();
 
-    parameter DELAY = 2;
-
-    reg clk = 1'b1, rst = 1'b0, en = 1'b1;
+    reg [7:0] challenge;
+    reg [7:0] challenge2;
+    reg clk = 1'b1;
+    reg rst = 1'b0;
+    reg en = 1'b1; 
+    
     wire [7:0] response;
+    wire [7:0] response2;
     wire ready;
+    wire ready2;
+    reg [7:0] HD_response;
+
+    parameter DELAY = 1;
+    integer i = 0;
+    integer uniformity = 0;
+    integer j = 0;
+    integer uniformity2 = 0;
+    integer uniqueness = 0;
     always #1 clk = ~clk;
-    reg [7:0] in = 8'b1101_0100;
-    reg [7:0] response1;
-    reg [7:0] response2;
+    
+
+    Ring_Oscillator_PUF #(
+        .n0(3),.n1(3),.n2(2),.n3(3),.n4(8),.n5(3), .n6(3), .n7(5),
+        .n8(8),.n9(2),.n10(4),.n11(3),.n12(6),.n13(7),.n14(5), .n15(5)
+    ) chip_1 (
+        .clk(clk),
+        .en(en), 
+        .rst(rst), 
+        .chall_in(challenge), 
+        .response(response), 
+        .ready(ready)
+    );
 
 
-    Ring_Oscillator_PUF  chip(.clk(clk), .en(en), .rst(rst), .chall_in(in), .response(response), .ready(ready));
-
-    integer i, error_count=0, cnt = 0;
+    Ring_Oscillator_PUF #(
+        .n0(9),.n1(2),.n2(3),.n3(4),.n4(5),.n5(6), .n6(7), .n7(2),
+        .n8(6),.n9(2),.n10(5),.n11(4),.n12(3),.n13(6),.n14(2), .n15(8)
+    ) chip_2 (
+        .clk(clk),
+        .en(en), 
+        .rst(rst), 
+        .chall_in(challenge2), 
+        .response(response2), 
+        .ready(ready2)
+    );
 
     initial begin
 
@@ -47,31 +77,57 @@ module Ring_Oscillator_PUF_t();
         rst = 1'b1;
         #DELAY;
         rst = 1'b0;
-        
-        for(i = 0 ; i < 2**8 ; i = i) begin
-            in = i[7:0];
-            #DELAY;
-            if(ready && cnt == 0 )begin
-                response1 = response;
-                cnt=1;
-            end else if(ready && cnt == 1 )begin
-                response2 = response;
-                if(response1 == response2 ) begin
-                    $display("[CORRECT] challenge = %b, response1 = %b, response2 = %b", in, response1, response2);
-                end else begin
-                    $display("[ERROR] challenge = %b, response1 = %b, response2 = %b", in, response1, response2);
-                    error_count = error_count + 1;
-                end
-                cnt=0;
-                i = i + 1;
+        #DELAY;
+
+        while (i<5) begin
+             
+            if(i === 3'b000)begin
+                challenge = 8'b1101_0100;
+            end else if(i === 3'b001) begin
+                challenge = 8'b0101_0010;
+            end else if(i === 3'b010) begin
+                challenge = 8'b0001_0110;
+            end else if(i === 3'b011) begin
+                challenge = 8'b1110_0111;
+            end else if(i === 3'b100) begin
+                challenge = 8'b1100_0001;
             end
+
+            while (!ready) #DELAY;
+
+            uniformity = response[0] + response[1] + response[2] + response[3] + response[4]+ response[5] + response[6] + response[7];
+            
+            $display("[Testcase %1d] Challenge = %b, Response = %b, Uniformity = %1d/8," , i, challenge, response, uniformity);
+            while (ready) #DELAY;
+            i=i+1;
         end
 
-        if(error_count === 0)
-            $display("All Correct!!");
-        else    
-            $display("There are %d errors QQ", error_count);
+        while (j<5) begin
+             
+            if(j === 3'b000)begin
+                challenge2 = 8'b1101_0100;
+            end else if(j === 3'b001) begin
+                challenge2 = 8'b0101_0010;
+            end else if(j === 3'b010) begin
+                challenge2 = 8'b0001_0110;
+            end else if(j === 3'b011) begin
+                challenge2 = 8'b1110_0111;
+            end else if(j === 3'b100) begin
+                challenge2 = 8'b1100_0001;
+            end
 
+            while (!ready2) #DELAY;
+
+            uniformity2 = response2[0] + response2[1] + response2[2] + response2[3] + response2[4]+ response2[5] + response2[6] + response2[7];
+
+            $display("[v2 Testcase %1d] Challenge = %b, Response = %b, Uniformity = %1d/8" , i, challenge2, response2, uniformity2);
+            while (ready2) #DELAY;
+            j=j+1;
+        end
+
+        $display("===== Simulation End ======"); 
         $finish;
     end
+    
+
 endmodule

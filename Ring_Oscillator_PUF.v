@@ -21,7 +21,26 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module Ring_Oscillator_PUF(clk, en, rst, chall_in, response, ready);
+module Ring_Oscillator_PUF #(
+    parameter n0 = 9,
+    parameter n1 = 2,
+    parameter n2 = 3,
+    parameter n3 = 4,
+    parameter n4 = 5,
+    parameter n5 = 6,
+    parameter n6 = 7,
+    parameter n7 = 2,
+    parameter n8 = 6,
+    parameter n9 = 2,
+    parameter n10 = 5,
+    parameter n11 = 4,
+    parameter n12 = 3,
+    parameter n13 = 6,
+    parameter n14 = 2,
+    parameter n15 = 8
+) (
+    clk, en, rst, chall_in, response, ready
+);
 input clk, en, rst;
 input[7:0] chall_in;
 output[7:0] response;
@@ -54,23 +73,23 @@ output ready;
         reset_arbiter <= ready_to_read || rst;
     end
 
-    Ring_Oscillator #(.n(9)) ro_0 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[0]));
-    Ring_Oscillator #(.n(2)) ro_1 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[1]));
-    Ring_Oscillator #(.n(3)) ro_2 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[2]));
-    Ring_Oscillator #(.n(4)) ro_3 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[3]));
-    Ring_Oscillator #(.n(5)) ro_4 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[4]));
-    Ring_Oscillator #(.n(6)) ro_5 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[5]));
-    Ring_Oscillator #(.n(7)) ro_6 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[6]));
-    Ring_Oscillator #(.n(2)) ro_7 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[7]));
+    Ring_Oscillator #(.n(n0)) ro_0 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[0]));
+    Ring_Oscillator #(.n(n1)) ro_1 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[1]));
+    Ring_Oscillator #(.n(n2)) ro_2 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[2]));
+    Ring_Oscillator #(.n(n3)) ro_3 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[3]));
+    Ring_Oscillator #(.n(n4)) ro_4 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[4]));
+    Ring_Oscillator #(.n(n5)) ro_5 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[5]));
+    Ring_Oscillator #(.n(n6)) ro_6 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[6]));
+    Ring_Oscillator #(.n(n7)) ro_7 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[7]));
 
-    Ring_Oscillator #(.n(6)) ro_8 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[8]));
-    Ring_Oscillator #(.n(2)) ro_9 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[9]));
-    Ring_Oscillator #(.n(5)) ro_10 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[10]));
-    Ring_Oscillator #(.n(4)) ro_11 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[11]));
-    Ring_Oscillator #(.n(3)) ro_12 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[12]));
-    Ring_Oscillator #(.n(6)) ro_13 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[13]));
-    Ring_Oscillator #(.n(2)) ro_14 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[14]));
-    Ring_Oscillator #(.n(8)) ro_15 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[15]));
+    Ring_Oscillator #(.n(n8)) ro_8 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[8]));
+    Ring_Oscillator #(.n(n9)) ro_9 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[9]));
+    Ring_Oscillator #(.n(n10)) ro_10 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[10]));
+    Ring_Oscillator #(.n(n11)) ro_11 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[11]));
+    Ring_Oscillator #(.n(n12)) ro_12 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[12]));
+    Ring_Oscillator #(.n(n13)) ro_13 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[13]));
+    Ring_Oscillator #(.n(n14)) ro_14 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[14]));
+    Ring_Oscillator #(.n(n15)) ro_15 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[15]));
 
 
     Scrambler scrambler_lfsr(.input_challenge(chall_in), .clk(clk), .rst(scrambler_rst), .output_challenge(scr_out));
