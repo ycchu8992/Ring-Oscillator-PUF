@@ -50,7 +50,7 @@ output ready;
     assign oscillator_rst = ready_to_read || rst;
 
     always @(posedge clk) begin
-        reset_counter <= ready_to_read// || rst;
+        reset_counter <= ready_to_read;// || rst;
         reset_scrambler <= reset_counter;
         reset_arbiter <= reset_counter;
     end
