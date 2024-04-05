@@ -31,14 +31,13 @@ module Ring_Oscillator_PUF_t();
     wire ready;
     always #1 clk = ~clk;
     reg [7:0] in = 8'b1101_0100;
+    reg [7:0] response1;
+    reg [7:0] response2;
 
 
-    //====================================
-    // TODO: Connect your module here. Please connect it by port name but not order
     Ring_Oscillator_PUF  chip(.clk(clk), .en(en), .rst(rst), .chall_in(in), .response(response), .ready(ready));
-    //====================================
 
-    integer i;
+    integer i, error_count=0, cnt = 0;
 
     initial begin
 
@@ -50,13 +49,28 @@ module Ring_Oscillator_PUF_t();
         rst = 1'b0;
         
         for(i = 0 ; i < 2**8 ; i = i) begin
-            #DELAY;
             in = i[7:0];
-            if(ready)begin
-                $display("challenge = %b, response = %b", in, response);
-                i=i+1;
+            #DELAY;
+            if(ready && cnt == 0 )begin
+                response1 = response;
+                cnt=1;
+            end else if(ready && cnt == 1 )begin
+                response2 = response;
+                if(response1 == response2 ) begin
+                    $display("[CORRECT] challenge = %b, response1 = %b, response2 = %b", in, response1, response2);
+                end else begin
+                    $display("[ERROR] challenge = %b, rresponse1 = %b, response2 = %b", in, response1, response2);
+                    error_count = error_count + 1;
+                end
+                cnt=0;
+                i = i + 1;
             end
         end
+
+        if(error_count === 0)
+            $display("All Correct!!");
+        else    
+            $display("There are %d errors QQ", error_count);
 
         $finish;
     end

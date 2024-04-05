@@ -33,16 +33,27 @@ output ready;
     wire [1:0] counter_out;
     wire winner;
     wire done;
+
     wire counter_rst;	//reset counter while generating response
     wire scrambler_rst;	//reset scrambler while generating response 
-    wire arbiter_rst;	//reset arbiter while generating response 
+    wire arbiter_rst;	//reset arbiter while generating response
+
+    reg reset_counter;	//reset counter while generating response
+    reg reset_scrambler;	//reset scrambler while generating response 
+    reg reset_arbiter;	//reset arbiter while generating response 
 
     assign ready = ready_to_read;
 
-    assign counter_rst = ready_to_read || rst;
-    assign scrambler_rst = ready_to_read || rst;
-    assign arbiter_rst = ready_to_read || rst;
-    assign oscillator_rst = ready_to_read || rst;
+    assign counter_rst = reset_counter ;//|| rst;
+    assign scrambler_rst = reset_scrambler;// || rst;
+    assign arbiter_rst = reset_arbiter;// || rst;
+    assign oscillator_rst = ready_to_read; //|| rst;
+
+    always @(posedge clk) begin
+        reset_counter <= ready_to_read || rst;
+        reset_scrambler <= reset_counter;
+        reset_arbiter <= reset_counter;
+    end
 
     Ring_Oscillator #(.n(9)) ro_0 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[0]));
     Ring_Oscillator #(.n(2)) ro_1 (.clk(clk), .enable(en), .rst(oscillator_rst), .out(out[1]));
