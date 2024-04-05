@@ -46,26 +46,23 @@ endmodule
 module Ring_Oscillator #(parameter n=10)(clk, enable, rst, out);
 input clk, enable, rst;
 output out;
-    reg [12:0] connect;
-    reg [12:0] next_connect;
-
-    //reg w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13;
+    reg [14:0] connect;
+    reg [14:0] next_connect;
 
     ClockDivider #(.n(n)) Delay(.clk(clk), .rst(rst), .delay(CLK));
 
-    always @(posedge CLK, posedge rst) begin //posedge CLK, 
+    always @(posedge CLK, posedge rst) begin
         if(rst) begin
-            next_connect = 13'b000_1000_0011_1;
+            next_connect = 15'b1010_1010_1010_101;
         end else begin
-            
             next_connect = connect;
         end       
     end
     
-    assign out =  connect[12];
+    assign out = connect[14];
 
     always @(*) begin
-        connect[12:0] = { ~next_connect[11:0], ~(enable & out)};
+        connect[14:0] = { ~next_connect[13:0], ~(enable & out)};
     end
 
 endmodule
